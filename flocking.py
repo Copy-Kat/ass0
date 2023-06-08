@@ -1,11 +1,9 @@
 from enum import Enum, auto
-from polars import select
-import pathlib
+import os
 
 import pygame as pg
 from pygame.math import Vector2
 from vi import Agent, Simulation
-import vi
 from vi.config import Config, dataclass, deserialize
 
 
@@ -152,6 +150,13 @@ x, y = config.window.as_tuple()
 
 df = FlockingLive(config).batch_spawn_agents(100, Bird, images=["images/bird.png"]).run().snapshots
 
+file_name = "data.csv"
+
 print(df)
 
-df.write_csv("new_file.csv", separator=",")
+if not os.path.exists(file_name):
+    with open(file_name, 'w'): pass
+
+df.write_csv(file_name, separator=",")
+
+print("Output: ", file_name)
